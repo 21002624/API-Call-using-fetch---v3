@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>University Data</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+<label for="countries">Select a country:</label>
+<select id="countries" onchange="fetchUniversityData()">
+  <option value="India">India</option>
+  <!-- Add more countries as needed -->
+</select>
+
+<table id="universityTable">
+  <thead>
+    <tr>
+      <th>University Name</th>
+      <th>Domains</th>
+    </tr>
+  </thead>
+  <tbody id="universityData"></tbody>
+</table>
+
+<script>
+  function fetchUniversityData() {
+    const selectedCountry = document.getElementById('countries').value;
+    const apiUrl = `https://universities.hipolabs.com/search?country=${selectedCountry}`;
+
+
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+
+        const tableBody = document.getElementById('universityData');
+        tableBody.innerHTML = '';
+
+        data.forEach(entry => {
+          const row = tableBody.insertRow();
+          row.insertCell(0).innerText = entry.name;
+          row.insertCell(1).innerText = entry.domains.join(', ');
+        });
+      })
+      .catch(error => console.error('Error fetching university data:', error));
+  }
+</script>
+
+</body>
+</html>
